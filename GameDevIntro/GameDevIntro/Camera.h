@@ -30,14 +30,14 @@ public:
 
 	LPDIRECT3DTEXTURE9 texBrick;
 
-	LPDIRECT3D9 d3d = NULL;						// Direct3D handle
-	LPDIRECT3DDEVICE9 d3ddv = NULL;				// Direct3D device object
+	LPDIRECT3D9 d3d = NULL;						
+	LPDIRECT3DDEVICE9 d3ddv = NULL;				
 
 	LPDIRECT3DSURFACE9 backBuffer = NULL;
 	int BackBufferWidth = 0;
 	int BackBufferHeight = 0;
 
-	LPD3DXSPRITE spriteHandler = NULL;			// Sprite helper library to help us draw 2D images 
+	LPD3DXSPRITE spriteHandler = NULL;			
 
 	Camera(HWND hWnd, LPDIRECT3DTEXTURE9 texBrick, LPDIRECT3D9 d3d, LPDIRECT3DDEVICE9 d3ddv,
 		LPDIRECT3DSURFACE9 backBuffer, int BackBufferWidth, int BackBufferHeight, LPD3DXSPRITE spriteHandler);
@@ -50,8 +50,8 @@ public:
 	HWND CreateCamera(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int ScreenHeight);
 	void InitDirectX();
 	void LoadResources(Brick brick);
-	void Render(Brick brick);
-	int Run(Brick brick);
+	void Render(Brick brick, Brick br);
+	int Run(Brick brick, Brick br);
 	void Cleanup();
 };
 

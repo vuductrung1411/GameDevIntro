@@ -6,9 +6,9 @@ class Brick :
 {
 public:
 
-    void RunArroundFollowClockwise(int WindowHeight, int WindowWidth, DWORD dt);
-    void RunArroundCounterClockwise();
+    Brick();
+    Brick(float x, float y, float height, float width, float vx, float vy, const wchar_t* path);
 
-    void Update(DWORD dt);
+    
 };
 

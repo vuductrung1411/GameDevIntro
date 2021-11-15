@@ -1,16 +1,24 @@
 #include "Brick.h"
 
-void Brick::RunArroundFollowClockwise(int WindowHeight, int WindowWidth, DWORD dt)
+Brick::Brick(float x, float y, float height, float width, float vx, float vy, const wchar_t* path)
 {
-	
+	this->x = x;
+	this->y = y;
+	this->height = height;
+	this->width = width;
+	this->vx = vx;
+	this->vy = vy;
+	this->path = path;
 }
 
-void Brick::RunArroundCounterClockwise()
+Brick::Brick()
 {
-	
+	this->x = 0.0f;
+	this->y = 0.0f;
+	this->height = 16.0f;
+	this->width = 16.0f;
+	this->vx = 0.2f;
+	this->vy = 0.2f;
+	this->path = L"brick.png";
 }
 
-void Brick::Update(DWORD dt)
-{
-	this->x += this->vx * dt;
-}

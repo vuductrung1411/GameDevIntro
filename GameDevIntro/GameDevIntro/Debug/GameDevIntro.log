@@ -1,2 +1,2 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(1074,5): error MSB6006: "link.exe" exited with code 1168.
-LINK : fatal error LNK1168: cannot open C:\Users\vuduc\source\repos\GameDevIntro\Debug\GameDevIntro.exe for writing
+﻿  main.cpp
+  GameDevIntro.vcxproj -> C:\Users\vuduc\Documents\GitHub\GameDevIntro\GameDevIntro\Debug\GameDevIntro.exe

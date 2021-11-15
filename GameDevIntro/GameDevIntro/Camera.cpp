@@ -106,7 +106,7 @@ void Camera::LoadResources(Brick brick)
 {
 	HRESULT result = D3DXCreateTextureFromFileEx(
 		this->d3ddv,								// Pointer to Direct3D device object
-		brick.path,//BRICK_TEXTURE_PATH,					// Path to the image to load
+		brick.path,							// Path to the image to load
 		D3DX_DEFAULT_NONPOW2, 				// Auto texture width (get from file)
 		D3DX_DEFAULT_NONPOW2, 				// Auto texture height (get from file)
 		1,
@@ -129,7 +129,7 @@ void Camera::LoadResources(Brick brick)
 	DebugOut(L"[INFO] Texture loaded Ok: %s \n", brick.path  /*BRICK_TEXTURE_PATH*/);
 }
 
-void Camera::Render(Brick brick)
+void Camera::Render(Brick brick, Brick br)
 {
 	if (this->d3ddv->BeginScene())
 	{
@@ -141,6 +141,9 @@ void Camera::Render(Brick brick)
 		D3DXVECTOR3 p(brick.x, brick.y, 0);
 		this->spriteHandler->Draw(texBrick, NULL, NULL, &p, D3DCOLOR_WHITE);
 
+		D3DXVECTOR3 p2(br.x, br.y, 0);
+		this->spriteHandler->Draw(texBrick, NULL, NULL, &p2, D3DCOLOR_WHITE);
+
 		DebugOutTitle(L"%s (%0.1f,%0.1f) v:%0.1f", WINDOW_TITLE, brick.x, brick.y, brick.vx);
 
 		spriteHandler->End();
@@ -151,7 +154,7 @@ void Camera::Render(Brick brick)
 	this->d3ddv->Present(NULL, NULL, NULL, NULL);
 }
 
-int Camera::Run(Brick brick)
+int Camera::Run(Brick brick, Brick br)
 {
 	MSG msg;
 	int done = 0;
@@ -177,8 +180,9 @@ int Camera::Run(Brick brick)
 		if (dt >= tickPerFrame)
 		{
 			frameStart = now;
-			brick.Update(dt);
-			Render(brick);
+			brick.Update(0.0f, 0.0f, this->BackBufferHeight, this->BackBufferWidth, dt);
+			br.Update(0.0f, 0.0f, this->BackBufferHeight, this->BackBufferWidth, dt);
+			Render(brick, br);
 		}
 		else
 			Sleep(tickPerFrame - dt);
