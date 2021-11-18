@@ -144,6 +144,8 @@
   <ItemGroup>
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="Coords.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameDevIntro.h" />
     <ClInclude Include="GameObject.h" />
@@ -153,6 +155,8 @@
   <ItemGroup>
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Coords.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

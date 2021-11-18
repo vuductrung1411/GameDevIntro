@@ -1,2 +1,7 @@
-﻿  main.cpp
-  GameDevIntro.vcxproj -> C:\Users\vuduc\Documents\GitHub\GameDevIntro\GameDevIntro\Debug\GameDevIntro.exe
+﻿  Camera.cpp
+  main.cpp
+  Generating Code...
+Camera.obj : error LNK2001: unresolved external symbol "public: static class Coords Camera::coords" (?coords@Camera@@2VCoords@@A)
+Camera.obj : error LNK2001: unresolved external symbol "public: static int Camera::height" (?height@Camera@@2HA)
+Camera.obj : error LNK2001: unresolved external symbol "public: static int Camera::width" (?width@Camera@@2HA)
+C:\Users\vuduc\Documents\GitHub\GameDevIntro\GameDevIntro\Debug\GameDevIntro.exe : fatal error LNK1120: 3 unresolved externals

@@ -3,6 +3,11 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
+#include "Coords.h"
+
+//#include "Camera.h"
+//class Camera;
+
 enum Status
 {
 	STATUS_STAND,	
@@ -19,14 +24,18 @@ enum Status
 class GameObject
 {
 public:
-	float x, y, height, width, vx, vy;
+	float height, width, vx, vy;
 	const wchar_t * path;
 	int status = 0;
+	Coords coords;
+
+	//Camera camera;
 
 	GameObject() {}
 	GameObject(float x, float y, float height, float width, float vx, float vy, const wchar_t* path, int status = 0);
 
 	void SetStatus(int status);
+	//void SetCamera(Camera camera);
 
 	void Update(float x, float y, int height, int width, DWORD dt);
 

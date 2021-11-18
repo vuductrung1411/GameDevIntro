@@ -9,11 +9,15 @@
 #include <time.h>
 #include <stdlib.h>
 
+#include <iostream>
+#include <fstream>
+
 #include "Brick.h"
+#include "Window.h"
 #include "Camera.h"
 
 #define WINDOW_CLASS_NAME L"SampleWindow" 
-#define WINDOW_TITLE L"Blaster Master"		
+#define WINDOW_TITLE L"Blaster Master"		  
 #define WINDOW_ICON_PATH L"BlasterMaster.ico" 
 
 HWND hWnd = 0;
@@ -37,32 +41,39 @@ LPD3DXSPRITE spriteHandler = NULL;			// Sprite helper library to help us draw 2D
 
 LPDIRECT3DTEXTURE9 texBrick;				// Texture object to store brick image
 
+using namespace std;
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	Brick brick;
-	Brick br;
+	/*Camera::coords.SetCoords(0.0f, 0.0f);
+	Camera::height = WINDOW_HEIGHT;
+	Camera::width == WINDOW_WIDTH;*/
 
-	br.x = 50.0f;
-	br.y = 50.0f;
-	//br.path = L"BlasterMaster.png";
+	Camera::SetValue(Coords(0.0f, 0.0f), WINDOW_HEIGHT, WINDOW_WIDTH);
 
-	brick.SetStatus(STATUS_GO_AROUND_FOLLOW_CLOCKWISE);
-	//br.SetStatus(STATUS_GO_RIGHT);
+	Window window;
 
-	Camera camera;
+	Brick *brick = new Brick();
+	Brick *br = new Brick();
 
-	camera.hWnd = camera.CreateCamera(hInstance, nCmdShow, WINDOW_WIDTH, WINDOW_HEIGHT);
+	br->coords.SetCoords(50.0f, 50.0f);
+	//br->path = L"BlasterMaster.png";
 
-	if (camera.hWnd == 0) return 0;
+	brick->SetStatus(STATUS_GO_AROUND_FOLLOW_CLOCKWISE);
+	br->SetStatus(STATUS_GO_UP);
 
-	camera.InitDirectX();
+	window.hWnd = window.CreateNewWindow(hInstance, nCmdShow, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	camera.LoadResources(brick);
-	camera.LoadResources(br);
+	if (window.hWnd == 0) return 0;
+
+	window.InitDirectX();
+
+	window.LoadResources(*brick);
+	window.LoadResources(*br);
 	
-	camera.Run(brick, br);
+	window.Run(*brick, *br);
 
-	camera.Cleanup();
+	window.Cleanup();
 
 	return 0;
 }
