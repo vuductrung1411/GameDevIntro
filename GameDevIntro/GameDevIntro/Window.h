@@ -23,6 +23,8 @@
 
 #define MAX_FRAME_RATE 120
 
+
+
 class Window
 {
 public:

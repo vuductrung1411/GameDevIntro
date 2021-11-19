@@ -5,8 +5,7 @@
 
 #include "Coords.h"
 
-//#include "Camera.h"
-//class Camera;
+#include "Camera.h"
 
 enum Status
 {
@@ -29,31 +28,31 @@ public:
 	int status = 0;
 	Coords coords;
 
-	//Camera camera;
+	Camera camera;
 
 	GameObject() {}
-	GameObject(float x, float y, float height, float width, float vx, float vy, const wchar_t* path, int status = 0);
+	GameObject(Camera camera, float x, float y, float height, float width, float vx, float vy, const wchar_t* path, int status = 0);
 
 	void SetStatus(int status);
-	//void SetCamera(Camera camera);
+	void SetCamera(Camera camera);
 
-	void Update(float x, float y, int height, int width, DWORD dt);
+	void Update(DWORD dt); 
 
-	void MoveUp(float x, float y, int height, int width, DWORD dt);
-	void MoveDown(float x, float y, int height, int width, DWORD dt);
-	void MoveLeft(float x, float y, int height, int width, DWORD dt);
-	void MoveRight(float x, float y, int height, int width, DWORD dt);
+	void MoveUp(DWORD dt);
+	void MoveDown(DWORD dt);
+	void MoveLeft(DWORD dt); 
+	void MoveRight(DWORD dt); 
 
-	void GoUp(float xWnd, float yWnd, int heightWnd, int widthWnd, DWORD dt);
-	void GoDown(float xWnd, float yWnd, int heightWnd, int widthWnd, DWORD dt);
-	void GoLeft(float xWnd, float yWnd, int heightWnd, int widthWnd, DWORD dt);
-	void GoRight(float xWnd, float yWnd, int heightWnd, int widthWnd, DWORD dt);
-	void GoArroundFollowClockwise(float xWnd, float yWnd, int heightWnd, int widthWnd, DWORD dt);
-	void GoArroundCounterClockwise(float xWnd, float yWnd, int heightWnd, int widthWnd, DWORD dt);
+	void GoUp(DWORD dt);
+	void GoDown(DWORD dt);
+	void GoLeft(DWORD dt);
+	void GoRight(DWORD dt);
+	void GoArroundFollowClockwise(DWORD dt);
+	void GoArroundCounterClockwise(DWORD dt);
 
-	bool isCloseToTheTopEdge(float xWnd, float yWnd, int heightWnd, int widthWnd);
-	bool isCloseToTheBotEdge(float xWnd, float yWnd, int heightWnd, int widthWnd);
-	bool isCloseToTheRightEdge(float xWnd, float yWnd, int heightWnd, int widthWnd);
-	bool isCloseToTheLeftEdge(float xWnd, float yWnd, int heightWnd, int widthWnd);
+	bool isCloseToTheTopEdge();
+	bool isCloseToTheBotEdge();
+	bool isCloseToTheRightEdge();
+	bool isCloseToTheLeftEdge();
 };
 

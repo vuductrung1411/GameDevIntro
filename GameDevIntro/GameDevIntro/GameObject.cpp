@@ -1,7 +1,8 @@
 #include "GameObject.h"
 
-GameObject::GameObject(float x, float y, float height, float width, float vx, float vy, const wchar_t* path, int status)
+GameObject::GameObject(Camera camera, float x, float y, float height, float width, float vx, float vy, const wchar_t* path, int status)
 {
+	this->camera = camera;
 	this->coords.x = x;
 	this->coords.y = y;
 	this->height = height;
@@ -17,12 +18,12 @@ void GameObject::SetStatus(int status)
 	this->status = status;
 }
 
-//void GameObject::SetCamera(Camera camera)
-//{
-//	this->camera = camera;
-//}
+void GameObject::SetCamera(Camera camera)
+{
+	this->camera = camera;
+}
 
-void GameObject::Update(float x, float y, int height, int width, DWORD dt)
+void GameObject::Update(DWORD dt)
 {
 	switch (this->status)
 	{
@@ -31,22 +32,22 @@ void GameObject::Update(float x, float y, int height, int width, DWORD dt)
 	case STATUS_FOLLOW_KEYSTATE:
 		break;
 	case STATUS_GO_UP:
-		GoUp(x, y, height, width, dt);
+		GoUp(dt);
 		break;
 	case STATUS_GO_DOWN:
-		GoDown(x, y, height, width, dt);
+		GoDown(dt);
 		break;
 	case STATUS_GO_LEFT:
-		GoLeft(x, y, height, width, dt);
+		GoLeft(dt);
 		break;
 	case STATUS_GO_RIGHT:
-		GoRight(x, y, height, width, dt);
+		GoRight(dt);
 		break;
 	case STATUS_GO_AROUND_FOLLOW_CLOCKWISE:
-		GoArroundFollowClockwise(x, y, height, width, dt);
+		GoArroundFollowClockwise(dt);
 		break;
 	case STATUS_GO_AROUND_COUNTER_CLOCKWISE:
-		GoArroundCounterClockwise(x, y, height, width, dt);
+		GoArroundCounterClockwise(dt);
 		break;
 	case STATUS_HITTING_WALL:
 		break;
@@ -55,206 +56,229 @@ void GameObject::Update(float x, float y, int height, int width, DWORD dt)
 	}
 }
 
-
-void GameObject::MoveUp(float x, float y, int height, int width, DWORD dt)
+void GameObject::MoveUp(DWORD dt)
 {
 	this->coords.y -= this->vy * dt;
 
-	if (this->coords.y < y)
+	float minYCamera = this->camera.coords.y;
+
+	if (this->coords.y < minYCamera)
 	{
-		this->coords.y = y;
+		this->coords.y = minYCamera;
 	} 
 }
 
-void GameObject::MoveDown(float x, float y, int height, int width, DWORD dt)
+void GameObject::MoveDown(DWORD dt)
 {
 	this->coords.y += this->vy * dt;
 
-	if (this->coords.y > (y + height) - this->height)
+	float maxYCamera = this->camera.coords.y + this->camera.height;
+
+	if (this->coords.y > maxYCamera - this->height)
 	{
-		this->coords.y = (y + height) - this->height;
+		this->coords.y = maxYCamera - this->height;
 	}
 }
 
-void GameObject::MoveLeft(float x, float y, int height, int width, DWORD dt)
+void GameObject::MoveLeft(DWORD dt)
 {
 	this->coords.x -= this->vx * dt;
 
-	if (this->coords.x < x)
+	float minXCamera = this->camera.coords.x;
+
+	if (this->coords.x < minXCamera)
 	{
-		this->coords.x = x;
+		this->coords.x = minXCamera;
 	}
 }
 
-void GameObject::MoveRight(float x, float y, int height, int width, DWORD dt)
+void GameObject::MoveRight(DWORD dt)
 {
 	this->coords.x += this->vx * dt;
 
-	if (this->coords.x > (x + width) - this->width)
+	float maxXCamera = this->camera.coords.x + this->camera.width;
+
+	if (this->coords.x > maxXCamera - this->width)
 	{
-		this->coords.x = (x + width) - this->width;
+		this->coords.x = maxXCamera - this->width;
 	}
 }
 
-void GameObject::GoUp(float xWnd, float yWnd, int heightWnd, int widthWnd, DWORD dt)
+void GameObject::GoUp(DWORD dt)
 {
-	if (isCloseToTheTopEdge(xWnd, yWnd, heightWnd, widthWnd))
+	if (isCloseToTheTopEdge())
 	{
-		this->coords.y = yWnd + heightWnd - this->height;
+		float maxYCamera = this->camera.coords.y + this->camera.height;
+
+		this->coords.y = maxYCamera - this->height;
 	} 
-	else MoveUp(xWnd, yWnd, heightWnd, widthWnd, dt);
+	else MoveUp(dt);
 }
 
-void GameObject::GoDown(float xWnd, float yWnd, int heightWnd, int widthWnd, DWORD dt)
+void GameObject::GoDown(DWORD dt)
 {
-	if (isCloseToTheBotEdge(xWnd, yWnd, heightWnd, widthWnd))
+	if (isCloseToTheBotEdge())
 	{
-		this->coords.y = yWnd;
+		float minYCamera = this->camera.coords.y;
+
+		this->coords.y = minYCamera;
 	} 
-	else MoveDown(xWnd, yWnd, heightWnd, widthWnd, dt);
+	else MoveDown(dt);
 }
 
-void GameObject::GoLeft(float xWnd, float yWnd, int heightWnd, int widthWnd, DWORD dt)
+void GameObject::GoLeft(DWORD dt)
 {
-	if (isCloseToTheLeftEdge(xWnd, yWnd, heightWnd, widthWnd))
+	if (isCloseToTheLeftEdge())
 	{
-		this->coords.x = xWnd + widthWnd - this->width;
+		float maxXCamera = this->camera.coords.x + this->camera.width;
+
+		this->coords.x = maxXCamera - this->width;
 	}
-	else MoveLeft(xWnd, yWnd, heightWnd, widthWnd, dt);
+	else MoveLeft(dt);
 }
 
-void GameObject::GoRight(float xWnd, float yWnd, int heightWnd, int widthWnd, DWORD dt)
+void GameObject::GoRight(DWORD dt)
 {
-	if (isCloseToTheRightEdge(xWnd, yWnd, heightWnd, widthWnd))
+	if (isCloseToTheRightEdge())
 	{
-		this->coords.x = xWnd;
+		float minXCamera = this->camera.coords.x;
+
+		this->coords.x = minXCamera;
 	}
-	else MoveRight(xWnd, yWnd, heightWnd, widthWnd, dt);
+	else MoveRight(dt);
 }
 
-void GameObject::GoArroundFollowClockwise(float xWnd, float yWnd, int heightWnd, int widthWnd, DWORD dt)
+void GameObject::GoArroundFollowClockwise(DWORD dt)
 {
-	if (isCloseToTheTopEdge(xWnd, yWnd, heightWnd, widthWnd))
+	if (isCloseToTheTopEdge())
 	{
-		if (isCloseToTheRightEdge(xWnd, yWnd, heightWnd, widthWnd))
+		if (isCloseToTheRightEdge())
 		{
-			MoveDown(xWnd, yWnd, heightWnd, widthWnd, dt);
+			MoveDown(dt);
 		}
 		else
 		{
-			MoveRight(xWnd, yWnd, heightWnd, widthWnd, dt);
+			MoveRight(dt);
 		}
 		return;
 	}
 
-	if (isCloseToTheRightEdge(xWnd, yWnd, heightWnd, widthWnd))
+	if (isCloseToTheRightEdge())
 	{
-		if (isCloseToTheBotEdge(xWnd, yWnd, heightWnd, widthWnd))
+		if (isCloseToTheBotEdge())
 		{
-			MoveLeft(xWnd, yWnd, heightWnd, widthWnd, dt);
+			MoveLeft(dt);
 		}
 		else
 		{
-			MoveDown(xWnd, yWnd, heightWnd, widthWnd, dt);
+			MoveDown(dt);
 		}
 		return;
 	}
 
-	if (isCloseToTheBotEdge(xWnd, yWnd, heightWnd, widthWnd))
+	if (isCloseToTheBotEdge())
 	{
-		if (isCloseToTheLeftEdge(xWnd, yWnd, heightWnd, widthWnd))
+		if (isCloseToTheLeftEdge())
 		{
-			MoveUp(xWnd, yWnd, heightWnd, widthWnd, dt);
+			MoveUp(dt);
 		}
 		else
 		{
-			MoveLeft(xWnd, yWnd, heightWnd, widthWnd, dt);
+			MoveLeft(dt);
 		}
 		return;
 	}
 
-	if (isCloseToTheLeftEdge(xWnd, yWnd, heightWnd, widthWnd))
+	if (isCloseToTheLeftEdge())
 	{
-		if (isCloseToTheTopEdge(xWnd, yWnd, heightWnd, widthWnd))
+		if (isCloseToTheTopEdge())
 		{
-			MoveRight(xWnd, yWnd, heightWnd, widthWnd, dt);
+			MoveRight(dt);
 		}
 		else
 		{
-			MoveUp(xWnd, yWnd, heightWnd, widthWnd, dt);
-		}
-		return;
-	}
-}
-
-void GameObject::GoArroundCounterClockwise(float xWnd, float yWnd, int heightWnd, int widthWnd, DWORD dt)
-{
-	if (isCloseToTheLeftEdge(xWnd, yWnd, heightWnd, widthWnd))
-	{
-		if (isCloseToTheBotEdge(xWnd, yWnd, heightWnd, widthWnd))
-		{
-			MoveRight(xWnd, yWnd, heightWnd, widthWnd, dt);
-		}
-		else
-		{
-			MoveDown(xWnd, yWnd, heightWnd, widthWnd, dt);
-		}
-		return;
-	}
-
-	if (isCloseToTheBotEdge(xWnd, yWnd, heightWnd, widthWnd))
-	{
-		if (isCloseToTheRightEdge(xWnd, yWnd, heightWnd, widthWnd))
-		{
-			MoveUp(xWnd, yWnd, heightWnd, widthWnd, dt);
-		}
-		else
-		{
-			MoveRight(xWnd, yWnd, heightWnd, widthWnd, dt);
-		}
-		return;
-	}
-
-	if (isCloseToTheRightEdge(xWnd, yWnd, heightWnd, widthWnd))
-	{
-		if (isCloseToTheTopEdge(xWnd, yWnd, heightWnd, widthWnd))
-		{
-			MoveLeft(xWnd, yWnd, heightWnd, widthWnd, dt);
-		}
-		else
-		{
-			MoveUp(xWnd, yWnd, heightWnd, widthWnd, dt);
-		}
-		return;
-	}
-
-	if (isCloseToTheTopEdge(xWnd, yWnd, heightWnd, widthWnd))
-	{
-		if (isCloseToTheLeftEdge(xWnd, yWnd, heightWnd, widthWnd))
-		{
-			MoveDown(xWnd, yWnd, heightWnd, widthWnd, dt);
-		}
-		else
-		{
-			MoveLeft(xWnd, yWnd, heightWnd, widthWnd, dt);
+			MoveUp(dt);
 		}
 		return;
 	}
 }
 
-bool GameObject::isCloseToTheTopEdge(float xWnd, float yWnd, int heightWnd, int widthWnd)
+void GameObject::GoArroundCounterClockwise(DWORD dt)
 {
-	return (this->coords.y == yWnd);
+	if (isCloseToTheLeftEdge())
+	{
+		if (isCloseToTheBotEdge())
+		{
+			MoveRight(dt);
+		}
+		else
+		{
+			MoveDown(dt);
+		}
+		return;
+	}
+
+	if (isCloseToTheBotEdge())
+	{
+		if (isCloseToTheRightEdge())
+		{
+			MoveUp(dt);
+		}
+		else
+		{
+			MoveRight(dt);
+		}
+		return;
+	}
+
+	if (isCloseToTheRightEdge())
+	{
+		if (isCloseToTheTopEdge())
+		{
+			MoveLeft(dt);
+		}
+		else
+		{
+			MoveUp(dt);
+		}
+		return;
+	}
+
+	if (isCloseToTheTopEdge())
+	{
+		if (isCloseToTheLeftEdge())
+		{
+			MoveDown(dt);
+		}
+		else
+		{
+			MoveLeft(dt);
+		}
+		return;
+	}
 }
-bool GameObject::isCloseToTheBotEdge(float xWnd, float yWnd, int heightWnd, int widthWnd)
+
+bool GameObject::isCloseToTheTopEdge()
 {
-	return (this->coords.y == yWnd + heightWnd - this->height);
+	float minYCamera = this->camera.coords.y;
+
+	return (this->coords.y == minYCamera);
 }
-bool GameObject::isCloseToTheRightEdge(float xWnd, float yWnd, int heightWnd, int widthWnd)
+bool GameObject::isCloseToTheBotEdge()
 {
-	return (this->coords.x == xWnd + widthWnd - this->width);
+	float maxYCamera = this->camera.coords.y + this->camera.height;
+
+	return (this->coords.y == maxYCamera - this->height);
 }
-bool GameObject::isCloseToTheLeftEdge(float xWnd, float yWnd, int heightWnd, int widthWnd)
+bool GameObject::isCloseToTheRightEdge()
 {
-	return (this->coords.x == xWnd);
+	float maxXCamera = this->camera.coords.x + this->camera.width;
+
+	return (this->coords.x == maxXCamera - this->width);
+}
+bool GameObject::isCloseToTheLeftEdge()
+{
+	float minXCamera = this->camera.coords.x;
+
+	return (this->coords.x == minXCamera);
 }

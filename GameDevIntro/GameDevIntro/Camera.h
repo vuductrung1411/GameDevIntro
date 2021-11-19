@@ -5,12 +5,14 @@
 class Camera
 {
 private:
-	Camera() {}
-
+	
 public:
-	static Coords coords;
-	static int height;
-	static int width;
-	static void SetValue(Coords c, int h, int w);
+
+	Camera() {}
+	Camera(Coords c, int h, int w);
+
+	Coords coords;
+	int height;
+	int width;
 };
 

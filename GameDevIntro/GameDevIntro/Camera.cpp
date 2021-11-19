@@ -1,8 +1,8 @@
 #include "Camera.h"
 
-void Camera::SetValue(Coords c, int h, int w)
+Camera::Camera(Coords c, int h, int w)
 {
-	Camera::coords = c;
-	Camera::height = h;
-	Camera::width = w;
+	coords = c;
+	height = h;
+	width = w;
 }

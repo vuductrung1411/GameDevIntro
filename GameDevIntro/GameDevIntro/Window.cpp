@@ -186,8 +186,8 @@ int Window::Run(Brick brick, Brick br)
 		if (dt >= tickPerFrame)
 		{
 			frameStart = now;
-			brick.Update(0.0f, 0.0f, this->Height, this->Width, dt);
-			br.Update(0.0f, 0.0f, this->Height, this->Width, dt);
+			brick.Update(dt);
+			br.Update(dt);
 			Render(brick, br);
 		}
 		else
