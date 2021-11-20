@@ -28,6 +28,7 @@ void GameObject::Update(DWORD dt)
 	switch (this->status)
 	{
 	case STATUS_STAND:
+		// Do nothing
 		break;
 	case STATUS_FOLLOW_KEYSTATE:
 		break;

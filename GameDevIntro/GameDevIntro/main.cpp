@@ -39,7 +39,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//br->path = L"BlasterMaster.png";
 
 	brick->SetStatus(STATUS_GO_AROUND_FOLLOW_CLOCKWISE);
-	br->SetStatus(STATUS_GO_UP);
+	br->SetStatus(STATUS_GO_DOWN);
 
 	brick->SetCamera(camera);
 	br->SetCamera(camera);
