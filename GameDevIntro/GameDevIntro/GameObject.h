@@ -1,58 +1,38 @@
 #pragma once
 
-#include <d3d9.h>
+#include <Windows.h>
 #include <d3dx9.h>
 
-#include "Coords.h"
-
-#include "Camera.h"
-
-enum Status
+class CGameObject
 {
-	STATUS_STAND,	
-	STATUS_FOLLOW_KEYSTATE,
-	STATUS_GO_UP,
-	STATUS_GO_DOWN,
-	STATUS_GO_LEFT,
-	STATUS_GO_RIGHT,
-	STATUS_GO_AROUND_FOLLOW_CLOCKWISE,
-	STATUS_GO_AROUND_COUNTER_CLOCKWISE,
-	STATUS_HITTING_WALL
-};
+protected:
+	float x;
+	float y;
 
-class GameObject
-{
+	// This should be a pointer to an object containing all graphic/sound/audio assets for rendering this object. 
+	// For now, just a pointer to a single texture
+	LPDIRECT3DTEXTURE9 texture;
 public:
-	float height, width, vx, vy;
-	const wchar_t * path;
-	int status = 0;
-	Coords coords;
+	void SetPosition(float x, float y) { this->x = x, this->y = y; }
+	float GetX() { return x; }
+	float GetY() { return y; }
 
-	Camera camera;
+	CGameObject(float x = 0.0f, float y = 0.0f, LPDIRECT3DTEXTURE9 texture = NULL);
 
-	GameObject() {}
-	GameObject(Camera camera, float x, float y, float height, float width, float vx, float vy, const wchar_t* path, int status = 0);
+	virtual void Update(DWORD dt) { };
+	virtual void Render();
 
-	void SetStatus(int status);
-	void SetCamera(Camera camera);
-
-	void Update(DWORD dt); 
-
-	void MoveUp(DWORD dt);
-	void MoveDown(DWORD dt);
-	void MoveLeft(DWORD dt); 
-	void MoveRight(DWORD dt); 
-
-	void GoUp(DWORD dt);
-	void GoDown(DWORD dt);
-	void GoLeft(DWORD dt);
-	void GoRight(DWORD dt);
-	void GoArroundFollowClockwise(DWORD dt);
-	void GoArroundCounterClockwise(DWORD dt);
-
-	bool isCloseToTheTopEdge();
-	bool isCloseToTheBotEdge();
-	bool isCloseToTheRightEdge();
-	bool isCloseToTheLeftEdge();
+	~CGameObject();
 };
+typedef CGameObject* LPGAMEOBJECT;
 
+class CMario : public CGameObject
+{
+	float vx;
+public:
+	CMario(float x, float y, float vx, LPDIRECT3DTEXTURE9 texture) :CGameObject(x, y, texture)
+	{
+		this->vx = vx;
+	};
+	void Update(DWORD dt);
+};

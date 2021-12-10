@@ -1,2 +1,6 @@
-﻿  main.cpp
+﻿  Debug.cpp
+  Game.cpp
+  GameObject.cpp
+  main.cpp
+  Generating Code...
   GameDevIntro.vcxproj -> C:\Users\vuduc\Documents\GitHub\GameDevIntro\GameDevIntro\Debug\GameDevIntro.exe
