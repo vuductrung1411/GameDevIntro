@@ -142,18 +142,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Brick.h" />
+    <ClInclude Include="GameCoordinate.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameVector.h" />
+    <ClInclude Include="Mario.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="GameCoordinate.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameVector.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mario.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameDevIntro.rc" />

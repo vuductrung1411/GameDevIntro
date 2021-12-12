@@ -1,16 +1,3 @@
-/* =============================================================
-	INTRODUCTION TO GAME PROGRAMMING SE102
-
-	SAMPLE 01 - SKELETON CODE
-
-	This sample illustrates how to:
-
-	1/ Re-organize introductory code to an initial skeleton for better scalability
-	2/ Render transparent sprites
-	3/ CGame is a singleton, playing a role of an "engine".
-	4/ CGameObject is an abstract class for all game objects
-================================================================ */
-
 #include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
@@ -20,12 +7,12 @@
 #include "Game.h"
 #include "GameObject.h"
 
+#include "Mario.h"
+#include "Brick.h"
+
 #define WINDOW_CLASS_NAME L"Game Window"
 #define MAIN_WINDOW_TITLE L"Blash Master"
 #define WINDOW_ICON_PATH L"brick.ico"
-
-#define BRICK_TEXTURE_PATH L"brick.png"
-#define MARIO_TEXTURE_PATH L"mario.png"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)
 #define SCREEN_WIDTH 640
@@ -34,19 +21,8 @@
 
 using namespace std;
 
-CMario* mario;
-#define MARIO_START_X 10.0f
-#define MARIO_START_Y 130.0f
-#define MARIO_START_VX 0.1f
-
-CGameObject* brick;
-#define BRICK_X 10.0f
-#define BRICK_Y 100.0f
-
-LPDIRECT3DTEXTURE9 texMario = NULL;
-LPDIRECT3DTEXTURE9 texBrick = NULL;
-
-//vector<LPGAMEOBJECT> objects;  
+CGameObject* objects[10];
+int n = 7;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -66,12 +42,13 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 */
 void LoadResources()
 {
-	CGame* game = CGame::GetInstance();
-	texBrick = game->LoadTexture(BRICK_TEXTURE_PATH);
-	texMario = game->LoadTexture(MARIO_TEXTURE_PATH);
-
-	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX, texMario);
-	brick = new CGameObject(BRICK_X, BRICK_Y, texBrick);
+	objects[0] = new CMario();
+	objects[1] = new CBrick();
+	objects[2] = new CBrick(100, 100);
+	objects[3] = new CBrick(100, 10);
+	objects[4] = new CBrick(50, 50);
+	objects[5] = new CBrick(70, 70);
+	objects[6] = new CBrick(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 100);
 }
 
 /*
@@ -80,15 +57,12 @@ void LoadResources()
 */
 void Update(DWORD dt)
 {
-	/*
-	for (int i=0;i<n;i++)
+	for (int i = 0; i < n; i++)
+	{
 		objects[i]->Update(dt);
-	*/
+	}
 
-	mario->Update(dt);
-	brick->Update(dt);
-
-	DebugOutTitle(L"01 - Skeleton %0.1f, %0.1f", mario->GetX(), mario->GetY());
+	DebugOutTitle(L"Blash master %0.1f, %0.1f", objects[0]->GetCoord().GetX(), objects[0]->GetCoord().GetY());
 }
 
 /*
@@ -108,10 +82,9 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-
-		mario->Render();
-		brick->Render();
-
+		for (int i = 0; i < n; i++) {
+			objects[i]->Render();
+		}
 
 		spriteHandler->End();
 		d3ddv->EndScene();
